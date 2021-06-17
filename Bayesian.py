@@ -12,6 +12,16 @@ from bayes_opt import BayesianOptimization
 #全データを読み取る, csvファイルからPandas DataFrameへ読み込み
 data = pd.read_csv('train_3.csv', header=None, delimiter=',', low_memory=False)
 
+#dataのtargetをカテゴリーに変換
+data[6] = data[6].astype('category')
+
+# ラベルエンコーディング（LabelEncoder）
+le = LabelEncoder()
+encoded = le.fit_transform(data[6].values)
+decoded = le.inverse_transform(encoded)
+data[6] = encoded
+
+
 #メイン--------------------------------------------------------------
 def main():
     optimizer = bayesOpt()
@@ -78,23 +88,7 @@ def validate(l1, l2, l1_drop, l2_drop, epochs, batch_size):
         for i in range(4):
             #訓練データとテストデータに分割
             train, test = split_data(i)
-
-            #trainのtargetをカテゴリーに変換
-            train[6] = train[6].astype('category')
-            test[6] = test[6].astype('category')
-
-            # ラベルエンコーディング（LabelEncoder）
-            #訓練データ
-            le = LabelEncoder()
-            encoded = le.fit_transform(train[6].values)
-            decoded = le.inverse_transform(encoded)
-            train[6] = encoded
-            #テストデータ
-            le = LabelEncoder()
-            encoded = le.fit_transform(test[6].values)
-            decoded = le.inverse_transform(encoded)
-            test[6] = encoded
-
+            
             #データとラベルを分割する
             x_train, y_train = train.drop([6], axis=1).drop([7], axis=1), train[6]
             x_test, y_test = test.drop([6], axis=1).drop([7], axis=1), test[6]
