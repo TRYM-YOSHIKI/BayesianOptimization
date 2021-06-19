@@ -73,7 +73,7 @@ def validate(l1, l2, l1_drop, l2_drop, epochs, batch_size):
     def split_data(i):
         train_scope = [(251, 1000), (501, 250), (751, 500), (1, 750)]  #データを分割するための範囲
         test_scope = [(1, 250), (251, 500), (501, 750), (751, 1000)]  #データを分割するための範囲
-        if i != 3:
+        if i != 3 or i != 0:
             train = data[(data[7] >= train_scope[i][0]) | (data[7] <= train_scope[i][1])]
             test = data[(data[7] >= test_scope[i][0]) & (data[7] <= test_scope[i][1])]
         else:
